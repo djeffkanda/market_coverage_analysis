@@ -26,13 +26,7 @@ def argument_parser():
         help='url to the youtube playlist',
         required=True
     )
-    # parser.add_argument(
-    #     '-lp',
-    #     '--log_path',
-    #     type=str,
-    #     help='Path to the log of processed videos',
-    #     required=True
-    # )
+
     parser.add_argument(
         '-pfx',
         '--prefix',
