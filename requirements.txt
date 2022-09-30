@@ -1,0 +1,4 @@
+torch~=1.8.0
+whisper~=1.0
+numpy~=1.19.2
+pytube~=12.1.0
