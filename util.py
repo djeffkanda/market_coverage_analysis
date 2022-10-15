@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
 import pandas as pd
-import bertopic
+# import bertopic
 import os
 import re
+
+import torch
 
 PATHS = dict(
     blw="./data/blw/",
@@ -48,15 +50,15 @@ def generate_dataset(path, prefix='blw'):
     return file_dates, file_txts
 
 
-def filter_text_tm(txts : list):
-  tmp_txts = []
-  for txt in txts:
-    # print(len(txt))
-    txt = " ".join(re.sub("[^a-zA-Z]+", " ", txt).split())
+def filter_text_tm(txts: list):
+    tmp_txts = []
+    for txt in txts:
+        # print(len(txt))
+        txt = " ".join(re.sub("[^a-zA-Z]+", " ", txt).split())
 
-    tmp_txts.append(txt)
-    # print(len(txt), "after")
-  return tmp_txts
+        tmp_txts.append(txt)
+        # print(len(txt), "after")
+    return tmp_txts
 
 
 def split_by_stop(f_dates, f_txts):
@@ -84,3 +86,11 @@ def split_by_stop(f_dates, f_txts):
         # new_txts.extend(txt_spit)
 
     return new_dates, new_txts
+
+
+def set_device():
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
+    return device
