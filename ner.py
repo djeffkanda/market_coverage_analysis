@@ -1,9 +1,12 @@
 import argparse
 
 import pandas as pd
+import torch
 
 from util import PATHS, generate_dataset, split_by_stop, set_device
 from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
+from tqdm.auto import tqdm
+
 
 def argument_parser():
     """
@@ -30,8 +33,6 @@ def argument_parser():
     return parser.parse_args()
 
 
-
-
 if __name__ == "__main__":
     args = argument_parser()
 
@@ -44,16 +45,18 @@ if __name__ == "__main__":
     device = set_device()
     model = AutoModelForTokenClassification.from_pretrained("dbmdz/bert-large-cased-finetuned-conll03-english")
     tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
-    ner_model = pipeline("ner", model=model, tokenizer=tokenizer).to(device)
+    ner_model = pipeline("ner", model=model, tokenizer=tokenizer, device=device)
 
     # Create data frame of NER
     ner_df = pd.DataFrame()
 
-    for dt, text in zip(new_f_dates, new_f_txts):
+    for dt, text in tqdm(zip(new_f_dates, new_f_txts), total=len(new_f_txts)):
         ner = ner_model(text)
+        if len(ner) < 1:
+            continue
         ner = pd.DataFrame(ner)
         ner['date'] = dt
 
-        ner_df.append(ner)
+        ner_df = ner_df.append(ner, ignore_index=True)
 
-    ner_df.to_csv('XX_XX.csv', encoding='utf-8')
+    ner_df.to_csv(f'{prefix}_ner.csv', encoding='utf-8')

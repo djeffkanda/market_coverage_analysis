@@ -40,12 +40,14 @@ def generate_dataset(path, prefix='blw'):
             fname_split = new_file_name.split('_')
             # print(fnsplit[1])
             f_date = datetime.strptime(fname_split[1], '%Y%m%d')
+            if f_date.year < 2020:
+                continue
 
             if len(fname_split) > 2:
                 f_date += timedelta(seconds=int(fname_split[2]))
 
             file_dates.append(f_date)
-            file_txts.append(read_text_file(file_path))
+            file_txts.append(read_text_file(file))
 
     return file_dates, file_txts
 
@@ -71,7 +73,6 @@ def split_by_stop(f_dates, f_txts):
         txt_spit = txt.split('.')
         chunk_txt = ""
         for chunk_item in txt_spit:
-
             if len(chunk_txt) + len(chunk_item) <= CHUNK_LENTH:
                 chunk_txt += " " + chunk_item
             else:
@@ -90,7 +91,7 @@ def split_by_stop(f_dates, f_txts):
 
 def set_device():
     if torch.cuda.is_available():
-        device = torch.device("cuda")
+        device = torch.device("cuda:0")
     else:
         device = torch.device("cpu")
     return device
