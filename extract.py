@@ -118,7 +118,7 @@ if __name__ == "__main__":
                 # print(f"{date} ==> {video_ind[date]}")
 
                 date = date + ("_" + str(video_ind[date] - 1) if video_ind[date] > 1 else "") + f"_{dt_str}"
-                print(url + " -- " + title + " " + date)
+                print(datetime.datetime.now().strftime("%Y%m%d%H%M%S")+" -> "+url + " -- " + title + " " + date)
 
                 try:
                     file = download_youtube_audio(url, out_fname=f"{PREFIX}_{date}.mp4")
