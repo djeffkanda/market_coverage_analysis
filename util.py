@@ -57,3 +57,30 @@ def filter_text_tm(txts : list):
     tmp_txts.append(txt)
     # print(len(txt), "after")
   return tmp_txts
+
+
+def split_by_stop(f_dates, f_txts):
+    new_dates, new_txts = [], []
+
+    CHUNK_LENTH = 500
+
+    for dt, txt in zip(f_dates, f_txts):
+
+        txt_spit = txt.split('.')
+        chunk_txt = ""
+        for chunk_item in txt_spit:
+
+            if len(chunk_txt) + len(chunk_item) <= CHUNK_LENTH:
+                chunk_txt += " " + chunk_item
+            else:
+                new_txts.append(chunk_txt)
+                new_dates.append(dt)
+                chunk_txt = chunk_item
+
+        new_txts.append(chunk_txt)
+        new_dates.append(dt)
+
+        # new_dates.extend([dt] * len(txt_spit))
+        # new_txts.extend(txt_spit)
+
+    return new_dates, new_txts
