@@ -45,7 +45,7 @@ if __name__ == "__main__":
     device = set_device()
     model = AutoModelForTokenClassification.from_pretrained("dbmdz/bert-large-cased-finetuned-conll03-english")
     tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
-    ner_model = pipeline("ner", model=model, tokenizer=tokenizer, device=device)
+    ner_model = pipeline("ner", model=model, tokenizer=tokenizer, device=device, grouped_entities=True)
 
     # Create data frame of NER
     ner_df = pd.DataFrame()
